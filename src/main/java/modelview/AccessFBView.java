@@ -37,7 +37,7 @@ import models.Person;
 public class AccessFBView {
 
  
-     @FXML
+    @FXML
     private TextField nameField;
     @FXML
     private TextField majorField;
@@ -147,11 +147,11 @@ public class AccessFBView {
 
     public boolean registerUser() {
         UserRecord.CreateRequest request = new UserRecord.CreateRequest()
-                .setEmail("user@example.com")
+                .setEmail(nameField.getText().trim() + "@example.com")
                 .setEmailVerified(false)
                 .setPassword("secretPassword")
-                .setPhoneNumber("+11234567890")
-                .setDisplayName("John Doe")
+                .setPhoneNumber(ageField.getText().trim())
+                .setDisplayName(nameField.getText().trim())
                 .setDisabled(false);
 
         UserRecord userRecord;
