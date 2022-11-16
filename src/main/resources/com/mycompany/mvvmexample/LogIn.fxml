@@ -27,7 +27,7 @@
                   <Font name="Helvetica" size="13.0" />
                </font>
             </TextField>
-            <Button mnemonicParsing="false" prefHeight="27.7" prefWidth="180.0" stylesheets="@styling.css" text="Log in" textFill="WHITE">
+            <Button mnemonicParsing="false" onAction="#switchToAccessFBView" prefHeight="27.7" prefWidth="180.0" stylesheets="@styling.css" text="Log in" textFill="WHITE">
                <font>
                   <Font name="Helvetica" size="13.0" />
                </font>

@@ -6,7 +6,6 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
 /**
@@ -19,6 +18,10 @@ public class LogInController implements Initializable {
     
     @FXML public void switchToSignUp() throws IOException {
         App.setRoot("SignUp");
+    }
+    
+    @FXML public void switchToAccessFBView() throws IOException {
+        App.setRoot("AccessFBView");
     }
 
     @Override
