@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="500.0" prefWidth="500.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="modelview.LogInController">
+   <children>
+      <VBox alignment="CENTER" fillWidth="false" layoutX="142.0" layoutY="149.0" prefHeight="203.0" prefWidth="217.0" spacing="20.0" AnchorPane.bottomAnchor="149.0" AnchorPane.leftAnchor="142.0" AnchorPane.rightAnchor="142.0" AnchorPane.topAnchor="149.0">
+         <children>
+            <Label text="Log in to your account">
+               <font>
+                  <Font name="Helvetica" size="16.0" />
+               </font>
+            </Label>
+            <TextField fx:id="usernameField" prefHeight="28.0" prefWidth="180.0" promptText="Username" styleClass="text-field" stylesheets="@styling.css">
+               <font>
+                  <Font name="Helvetica" size="13.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="passwordField" prefHeight="28.0" prefWidth="180.0" promptText="Password" styleClass="text-field" stylesheets="@styling.css">
+               <font>
+                  <Font name="Helvetica" size="13.0" />
+               </font>
+            </TextField>
+            <Button mnemonicParsing="false" prefHeight="27.7" prefWidth="180.0" stylesheets="@styling.css" text="Log in" textFill="WHITE">
+               <font>
+                  <Font name="Helvetica" size="13.0" />
+               </font>
+            </Button>
+            <HBox alignment="CENTER" prefHeight="0.0" prefWidth="253.0">
+               <children>
+                  <Label text="Don't have an account?">
+                     <font>
+                        <Font name="Helvetica" size="13.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="switchToSignUp" onMouseClicked="#switchToSignUp" styleClass="signup" stylesheets="@styling.css" text=" Sign up">
+                     <font>
+                        <Font name="Helvetica" size="13.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>

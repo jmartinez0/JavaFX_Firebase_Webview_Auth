@@ -1,0 +1,31 @@
+.text-field {
+    -fx-border-radius: 20 20 20 20;
+    -fx-background-radius: 20 20 20 20;
+    -fx-background-color: lightgray,white;
+}
+
+.text-field:focused{
+   -fx-background-color : dodgerblue,white;
+   -fx-background-insets: 0,1px;
+}
+
+.button {
+    -fx-border-radius: 20 20 20 20;
+    -fx-background-radius: 20 20 20 20;
+    -fx-background-color: dodgerblue;
+    -fx-text-fill: white;
+    -fx-cursor: hand;
+}
+
+.button:hover {
+    -fx-background-color: #1b86ee;
+}
+
+.button:pressed {
+    -fx-background-color: #1a80e3;
+}
+
+.signup {
+    -fx-text-fill: royalblue;
+    -fx-cursor: hand;
+}

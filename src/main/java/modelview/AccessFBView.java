@@ -81,7 +81,7 @@ public class AccessFBView {
     
      @FXML
     private void switchToSecondary() throws IOException {
-        App.setRoot("WebContainer.fxml");
+        App.setRoot("WebContainer");
     }
     
     public void addData() {
