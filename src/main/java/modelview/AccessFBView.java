@@ -64,33 +64,12 @@ public class AccessFBView implements Initializable {
         App.setRoot("WebContainer");
     }
     
-    
-
-
-    @FXML public void updateData(ActionEvent event) {
-        listOfUsers = tableField.getItems();
-        Person selectedPerson = tableField.getSelectionModel().getSelectedItem();
-        for (Person person : listOfUsers) {
-            if (person.getName().equals(selectedPerson.getName())
-                && person.getMajor().equals(selectedPerson.getMajor())
-                && person.getAge() == selectedPerson.getAge()) {
-                person.setName(nameField.getText());
-                person.setMajor(majorField.getText());
-                person.setAge(Integer.parseInt(ageField.getText()));
-                tableField.setItems(listOfUsers);
-                tableField.refresh();
-            }
-        }
-    }
-    
     @FXML public void rowSelected(MouseEvent event) {
         person = tableField.getSelectionModel().getSelectedItem();
         nameField.setText(person.getName());
         majorField.setText(person.getMajor());
         ageField.setText(String.valueOf(person.getAge()));
     }
-    
- 
     
     @FXML private void addRecord(ActionEvent event) {
         addData();
@@ -99,6 +78,11 @@ public class AccessFBView implements Initializable {
     
     @FXML public void deleteRecord(ActionEvent event) {
         deleteData();
+        readFirebase();
+    }
+    
+    @FXML public void updateRecord(ActionEvent event) {
+        updateData();
         readFirebase();
     }
  
@@ -115,7 +99,6 @@ public class AccessFBView implements Initializable {
     
     public void deleteData() {
         Person currentPerson = tableField.getSelectionModel().getSelectedItem();
-        System.out.println(currentPerson);
         try {
             String docID = "";
             ApiFuture<QuerySnapshot> future = App.fstore.collection("References").get();
@@ -132,7 +115,32 @@ public class AccessFBView implements Initializable {
             }
         } catch (InterruptedException | ExecutionException ex) {
             Logger.getLogger(AccessFBView.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println("Fail");
+            System.out.println("Failed to delete data");
+        }
+    }
+    
+    public void updateData() {
+        Person currentPerson = tableField.getSelectionModel().getSelectedItem();
+        String docID = "";
+        try {
+            ApiFuture<QuerySnapshot> future = App.fstore.collection("References").get();
+            List<QueryDocumentSnapshot> documents = future.get().getDocuments();
+            for (QueryDocumentSnapshot document : documents) {
+                person = new Person(String.valueOf(document.getData().get("Name")),
+                        document.getData().get("Major").toString(),
+                        Integer.parseInt(document.getData().get("Age").toString()));
+                if (person.equals(currentPerson)) {
+                    docID = document.getId();
+                }
+            }
+            DocumentReference docRef = App.fstore.collection("References").document(docID);
+            ApiFuture<WriteResult> futureUpdate = docRef.update("Name", nameField.getText(),
+                    "Major", majorField.getText(), "Age", ageField.getText());
+            // ...
+            WriteResult result = futureUpdate.get();
+            System.out.println("Write result: " + result);
+        } catch (InterruptedException | ExecutionException ex) {
+            Logger.getLogger(AccessFBView.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     

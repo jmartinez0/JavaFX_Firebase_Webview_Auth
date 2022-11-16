@@ -27,7 +27,7 @@
                     <MenuItem fx:id="readButton" mnemonicParsing="false" onAction="#readFirebase" text="Read" />
                         <MenuItem fx:id="writeButton" mnemonicParsing="false" onAction="#addRecord" text="Write" />
                         <MenuItem fx:id="removeButton" mnemonicParsing="false" onAction="#deleteRecord" text="Delete" />
-                        <MenuItem mnemonicParsing="false" text="Update" />
+                        <MenuItem mnemonicParsing="false" onAction="#updateRecord" text="Update" />
                   </items>
                 </Menu>
                   <Menu mnemonicParsing="false" text="View">
