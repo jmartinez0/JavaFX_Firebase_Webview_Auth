@@ -2,6 +2,7 @@
     -fx-border-radius: 20 20 20 20;
     -fx-background-radius: 20 20 20 20;
     -fx-background-color: lightgray,white;
+    -fx-font: 13px "Helvetica";
 }
 
 .text-field:focused {
@@ -13,6 +14,7 @@
     -fx-border-radius: 20 20 20 20;
     -fx-background-radius: 20 20 20 20;
     -fx-background-color: lightgray,white;
+    -fx-font: 13px "Helvetica";
 }
 
 .password-field:focused {
@@ -26,6 +28,7 @@
     -fx-background-color: dodgerblue;
     -fx-text-fill: white;
     -fx-cursor: hand;
+    -fx-font: 13px "Helvetica";
 }
 
 .button:hover {
@@ -43,4 +46,49 @@
 
 .incorrect {
     -fx-text-fill: crimson;
+}
+
+.table-view {
+    -fx-background-color: white;
+    -fx-border-color: lightgray;
+    -fx-font: 13px "Helvetica";
+}
+
+.table-view .column-header {
+    -fx-background-color: lightgray;
+    -fx-border-color: c6c6c6;
+}
+
+.table-row-focused {
+    -fx-background-color: dodgerblue;
+}
+
+.menu-bar {
+    -fx-background-color: lightgray;
+    -fx-font: 13px "Helvetica";
+}
+
+.menu:hover {
+    -fx-background-color: dodgerblue;
+}
+
+.menu:active {
+    -fx-background-color: dodgerblue;
+}
+
+.menu:pressed {
+    -fx-background-color: dodgerblue;
+}
+
+.menu-item:focused {
+    -fx-background-color: dodgerblue;
+}
+
+.menu-item:active {
+    -fx-background-color: dodgerblue;
+}
+
+.context-menu {
+    -fx-background-color: white;
+    -fx-background-radius: 5 5 5 5;
 }

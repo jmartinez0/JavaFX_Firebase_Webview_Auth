@@ -43,6 +43,21 @@ public class Person {
         this.age = age;
     }
     
+    @Override
+    public String toString() {
+        return name + major;
+    }
     
-    
+    @Override
+    public boolean equals(Object obj) {
+        Person p = (Person) obj;
+        if (this.name.equals(p.name)) {
+            if (this.major.equals(p.major)) {
+                if (this.age == (p.age)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 }

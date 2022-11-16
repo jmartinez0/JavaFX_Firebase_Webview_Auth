@@ -17,6 +17,8 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -36,7 +38,6 @@ public class AccessFBView implements Initializable {
     @FXML private TableColumn<Person, String> nameColumn, majorColumn;
     @FXML private TableColumn<Person, Integer> ageColumn;
     @FXML private TextField nameField, ageField, majorField;
-    @FXML private Button readButton, writeButton, removeButton;
 
     private boolean key;
     private ObservableList<Person> listOfUsers = FXCollections.observableArrayList();
@@ -44,21 +45,26 @@ public class AccessFBView implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
         AccessDataViewModel accessDataViewModel = new AccessDataViewModel();
         nameField.textProperty().bindBidirectional(accessDataViewModel.userNameProperty());
         majorField.textProperty().bindBidirectional(accessDataViewModel.userMajorProperty());
-        writeButton.disableProperty().bind(accessDataViewModel.isWritePossibleProperty().not());
-
+        nameField.setFocusTraversable(false);
+        majorField.setFocusTraversable(false);
+        ageField.setFocusTraversable(false);
         nameColumn.setCellValueFactory(new PropertyValueFactory<Person, String>("name"));
         majorColumn.setCellValueFactory(new PropertyValueFactory<Person, String>("major"));
         ageColumn.setCellValueFactory(new PropertyValueFactory<Person, Integer>("age"));
     }
     
-    @FXML public void removeData(ActionEvent event) {
-        int selected = tableField.getSelectionModel().getSelectedIndex();
-        tableField.getItems().remove(selected);
+    @FXML public void logOut(ActionEvent event) throws IOException {
+        App.setRoot("LogIn");
     }
+    
+    @FXML private void switchToWebContainer() throws IOException {
+        App.setRoot("WebContainer");
+    }
+    
+    
 
 
     @FXML public void updateData(ActionEvent event) {
@@ -66,40 +72,36 @@ public class AccessFBView implements Initializable {
         Person selectedPerson = tableField.getSelectionModel().getSelectedItem();
         for (Person person : listOfUsers) {
             if (person.getName().equals(selectedPerson.getName())
-                    && person.getMajor().equals(selectedPerson.getMajor())
-                    && person.getAge() == selectedPerson.getAge()) {
-                    person.setName(nameField.getText());
-                    person.setMajor(majorField.getText());
-                    person.setAge(Integer.parseInt(ageField.getText()));
-                    tableField.setItems(listOfUsers);
-                    tableField.refresh();
+                && person.getMajor().equals(selectedPerson.getMajor())
+                && person.getAge() == selectedPerson.getAge()) {
+                person.setName(nameField.getText());
+                person.setMajor(majorField.getText());
+                person.setAge(Integer.parseInt(ageField.getText()));
+                tableField.setItems(listOfUsers);
+                tableField.refresh();
             }
         }
     }
     
     @FXML public void rowSelected(MouseEvent event) {
-        Person selectedPerson = tableField.getSelectionModel().getSelectedItem();
-        nameField.setText(String.valueOf(selectedPerson.getName()));
-        majorField.setText(String.valueOf(selectedPerson.getMajor()));
-        ageField.setText(String.valueOf(selectedPerson.getAge()));
+        person = tableField.getSelectionModel().getSelectedItem();
+        nameField.setText(person.getName());
+        majorField.setText(person.getMajor());
+        ageField.setText(String.valueOf(person.getAge()));
     }
+    
+ 
     
     @FXML private void addRecord(ActionEvent event) {
         addData();
-    }
-
-    @FXML private void readRecord(ActionEvent event) {
         readFirebase();
     }
     
-    @FXML private void regRecord(ActionEvent event) {
-        registerUser();
+    @FXML public void deleteRecord(ActionEvent event) {
+        deleteData();
+        readFirebase();
     }
-    
-    @FXML private void switchToSecondary() throws IOException {
-        App.setRoot("WebContainer");
-    }
-    
+ 
     public void addData() {
         DocumentReference docRef = App.fstore.collection("References").document(UUID.randomUUID().toString());
         // Add document data  with id "alovelace" using a hashmap
@@ -109,6 +111,29 @@ public class AccessFBView implements Initializable {
         data.put("Age", Integer.parseInt(ageField.getText()));
         //asynchronously write data
         ApiFuture<WriteResult> result = docRef.set(data);
+    }
+    
+    public void deleteData() {
+        Person currentPerson = tableField.getSelectionModel().getSelectedItem();
+        System.out.println(currentPerson);
+        try {
+            String docID = "";
+            ApiFuture<QuerySnapshot> future = App.fstore.collection("References").get();
+            List<QueryDocumentSnapshot> documents = future.get().getDocuments();
+            for (QueryDocumentSnapshot document : documents) {
+                    person = new Person(String.valueOf(document.getData().get("Name")),
+                        document.getData().get("Major").toString(),
+                        Integer.parseInt(document.getData().get("Age").toString()));
+                if (person.equals(currentPerson)) {
+                    docID = document.getId();
+                    ApiFuture<WriteResult> writeResult = App.fstore.collection("References").document(docID).delete();
+                    System.out.println("Update time : " + writeResult.get().getUpdateTime());
+                }
+            }
+        } catch (InterruptedException | ExecutionException ex) {
+            Logger.getLogger(AccessFBView.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Fail");
+        }
     }
     
     public boolean readFirebase() {
@@ -137,7 +162,8 @@ public class AccessFBView implements Initializable {
         }
         return key;
     }
-        
+    
+    /*
     public void sendVerificationEmail() {
         try {
             UserRecord user = App.fauth.getUser("name");
@@ -145,27 +171,6 @@ public class AccessFBView implements Initializable {
 
         } catch (Exception e) {
         }
-    }
-
-    public boolean registerUser() {
-        UserRecord.CreateRequest request = new UserRecord.CreateRequest()
-                .setEmail(nameField.getText().trim() + "@example.com")
-                .setEmailVerified(false)
-                .setPassword("secretPassword")
-                .setPhoneNumber(ageField.getText().trim())
-                .setDisplayName(nameField.getText().trim())
-                .setDisabled(false);
-
-        UserRecord userRecord;
-        try {
-            userRecord = App.fauth.createUser(request);
-            System.out.println("Successfully created new user: " + userRecord.getUid());
-            return true;
-
-        } catch (FirebaseAuthException ex) {
-           // Logger.getLogger(FirestoreContext.class.getName()).log(Level.SEVERE, null, ex);
-            return false;
-        } 
-    }
+    }*/
 
 }
