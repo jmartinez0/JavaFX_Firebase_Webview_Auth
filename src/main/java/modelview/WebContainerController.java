@@ -93,12 +93,8 @@ public class WebContainerController implements Initializable {
     }
     
     @FXML
-    private void swithcBackStage(ActionEvent e){
-        try {
-            App.setRoot("AccessFBView.fxml");
-        } catch (IOException ex) {
-            Logger.getLogger(WebContainerController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    private void goBack(ActionEvent e) throws IOException{
+        App.setRoot("AccessFBView");
     }
 
     @Override
